@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Table,
   TableBody,
@@ -19,6 +21,7 @@ const tasks = [
     status: "Not Reviewed",
     dateAssigned: "September 18, 2024",
     actionButton: "Review",
+    link: "/dashboard/tasks/review",
   },
   {
     id: 2,
@@ -28,6 +31,7 @@ const tasks = [
     status: "Not Started",
     dateAssigned: "September 18, 2024",
     actionButton: "Start",
+    link: "/dashboard/tasks/start",
   },
 ];
 
@@ -66,8 +70,12 @@ export function TasksTable() {
               {task.dateAssigned}
             </TableCell>
             <TableCell>
-              <Button className="w-20 rounded-2xl font-bold" size={"sm"}>
-                {task.actionButton}
+              <Button
+                className="w-20 rounded-2xl font-bold"
+                size={"sm"}
+                asChild
+              >
+                <Link href={task.link}>{task.actionButton}</Link>
               </Button>
             </TableCell>
           </TableRow>

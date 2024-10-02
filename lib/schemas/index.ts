@@ -1,6 +1,8 @@
 import { UserRole } from "@prisma/client";
 import * as z from "zod";
 
+import { documentsToReview } from "../data";
+
 export const LoginSchema = z.object({
   email: z.string().email({
     message: "Email is required",
@@ -70,3 +72,22 @@ export const SettingsSchema = z
       path: ["password"],
     }
   );
+
+const documentsToReviewvalues = documentsToReview.map(
+  (document) => document.fileName
+);
+
+export const ReviewSchema = z.object({
+  documentsToReview: z
+    .array(z.string())
+    .refine(
+      (value) =>
+        value.sort().toString() == documentsToReviewvalues.sort().toString(),
+      {
+        message: "You have to agree to all documents",
+      }
+    ),
+  // uploadedDoc: z.string().url({
+  //   message: "Please Upload the I-9 document",
+  // }),
+});

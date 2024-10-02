@@ -6,6 +6,7 @@ import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
 import Providers from "@/components/providers/providers";
 import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/sonner";
 
 import "./globals.css";
 
@@ -48,6 +49,7 @@ export default async function RootLayout({
             routerConfig={extractRouterConfig(ourFileRouter)}
           />
           {children}
+          <Toaster richColors />
         </Providers>
       </body>
     </html>
