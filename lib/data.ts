@@ -18,6 +18,29 @@ export const documentsToReview = [
   },
 ] as const;
 
+export const tasks = [
+  {
+    id: 1,
+    task: "Review Documents",
+    jobTitle: "US Rater",
+    jobReq: "Req_00141951",
+    status: "Not Reviewed",
+    dateAssigned: "September 18, 2024",
+    actionButton: "Review",
+    link: "/dashboard/tasks/review",
+  },
+  {
+    id: 2,
+    task: "Complete Questionnaire",
+    jobTitle: "US Rater",
+    jobReq: "Req_00141951",
+    status: "Not Started",
+    dateAssigned: "September 18, 2024",
+    actionButton: "Start",
+    link: "/dashboard/tasks/start",
+  },
+];
+
 export const navItems: NavItem[] = [
   {
     title: "Dashboard",

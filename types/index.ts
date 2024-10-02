@@ -1,4 +1,4 @@
-import { Icons } from '@/components/icons';
+import { Icons } from "@/components/icons";
 
 export interface NavItem {
   title: string;
@@ -8,6 +8,17 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
+}
+
+export interface Task {
+  id: number;
+  task: string;
+  jobTitle: string;
+  jobReq: string;
+  status: string;
+  dateAssigned: string;
+  actionButton: string;
+  link: string;
 }
 
 export interface NavItemWithChildren extends NavItem {

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -23,24 +24,34 @@ import { documentsToReview } from "@/lib/data";
 import { ReviewSchema } from "@/lib/schemas";
 import { Separator } from "@/components/ui/separator";
 import { UploadButton } from "../uploadthing";
+import { review } from "@/actions/tasks";
 
 const ReviewForm = () => {
-  const [fileUrl, setFileUrl] = useState("");
+  const [serverData, setServerData] = useState<
+    { fileName: string; fileUrl: string } | undefined
+  >(undefined);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const form = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
     defaultValues: { documentsToReview: [] },
   });
 
   const onSubmit = (data: z.infer<typeof ReviewSchema>) => {
-    if (!fileUrl) {
+    if (!serverData) {
       return toast.error(
         "Please upload the completed I9 documents before submitting"
       );
     }
-    console.log({ data });
-    startTransition(() => {
-      toast(JSON.stringify(data, null, 2));
+
+    startTransition(async () => {
+      const result = await review(serverData.fileUrl);
+      if (!!result.success) {
+        toast.success("Task Completed");
+        router.push("/dashboard");
+        return;
+      }
+      toast.error(result.error);
     });
   };
 
@@ -114,6 +125,10 @@ const ReviewForm = () => {
             )}
           />
           <div className="flex flex-col gap-8 items-start mt-8">
+            <p className="text-sm text-muted-foreground">
+              If you don{"'"}t know how to complete the I9, please download the
+              following document.
+            </p>
             <div className="flex items-center space-x-4">
               <FileText className="h-16 w-16" />
               <Link
@@ -129,20 +144,25 @@ const ReviewForm = () => {
               <span className="text-red-700">*</span>
             </h3>
 
-            <UploadButton
-              endpoint="reviewUpload"
-              onClientUploadComplete={(res) => {
-                // Do something with the response
-                console.log("Files: ", res);
-                setFileUrl(res[0].url);
-                toast.success("Upload Completed");
-              }}
-              onUploadError={(error: Error) => {
-                // Do something with the error.
-                console.log(error);
-                toast.error(`ERROR! ${error.message}`);
-              }}
-            />
+            {!!serverData?.fileName ? (
+              <p>UploadedFile: {serverData.fileName}</p>
+            ) : (
+              <UploadButton
+                endpoint="reviewUpload"
+                disabled={!!serverData?.fileName}
+                onClientUploadComplete={(res) => {
+                  // Do something with the response
+                  console.log("Files: ", res);
+                  setServerData(res[0].serverData);
+                  toast.success("Upload Completed");
+                }}
+                onUploadError={(error: Error) => {
+                  // Do something with the error.
+                  console.log(error);
+                  toast.error(`ERROR! ${error.message}`);
+                }}
+              />
+            )}
 
             <Separator />
           </div>

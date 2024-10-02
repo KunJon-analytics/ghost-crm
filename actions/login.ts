@@ -23,7 +23,7 @@ export const login = async (
 
   const existingUser = await getUserByEmail(email);
 
-  if (!existingUser || !existingUser.email || !existingUser.password) {
+  if (!existingUser?.email) {
     return { error: "Email does not exist!" };
   }
 

@@ -9,34 +9,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Task } from "@/types";
 
 import { Button } from "../ui/button";
 import StartModal from "../forms/start-modal";
 
-const tasks = [
-  {
-    id: 1,
-    task: "Review Documents",
-    jobTitle: "US Rater",
-    jobReq: "Req_00141951",
-    status: "Not Reviewed",
-    dateAssigned: "September 18, 2024",
-    actionButton: "Review",
-    link: "/dashboard/tasks/review",
-  },
-  {
-    id: 2,
-    task: "Complete Questionnaire",
-    jobTitle: "US Rater",
-    jobReq: "Req_00141951",
-    status: "Not Started",
-    dateAssigned: "September 18, 2024",
-    actionButton: "Start",
-    link: "/dashboard/tasks/start",
-  },
-];
-
-export function TasksTable() {
+export function TasksTable({ tasks }: { tasks: Task[] }) {
   return (
     <Table>
       <TableHeader className="hidden lg:table-header-group">
@@ -70,19 +48,21 @@ export function TasksTable() {
             <TableCell className="hidden lg:table-cell">
               {task.dateAssigned}
             </TableCell>
-            <TableCell>
-              <Button
-                className="w-20 rounded-2xl font-bold"
-                size={"sm"}
-                asChild
-              >
-                {task.actionButton === "Review" ? (
-                  <Link href={task.link}>{task.actionButton}</Link>
-                ) : (
-                  <StartModal />
-                )}
-              </Button>
-            </TableCell>
+            {task.status.includes("Not") && (
+              <TableCell>
+                <Button
+                  className="w-20 rounded-2xl font-bold"
+                  size={"sm"}
+                  asChild
+                >
+                  {task.actionButton === "Review" ? (
+                    <Link href={task.link}>{task.actionButton}</Link>
+                  ) : (
+                    <StartModal />
+                  )}
+                </Button>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
