@@ -37,7 +37,7 @@ const ReviewForm = () => {
     defaultValues: { documentsToReview: [] },
   });
 
-  const onSubmit = (data: z.infer<typeof ReviewSchema>) => {
+  const onSubmit = () => {
     if (!serverData) {
       return toast.error(
         "Please upload the completed I9 documents before submitting"

@@ -69,7 +69,7 @@ const StartModal = () => {
           ) : (
             <UploadDropzone
               endpoint="startUpload"
-              disabled={!!serverData?.fileName}
+              disabled={!!serverData?.fileName || isPending}
               onClientUploadComplete={(res) => {
                 // Do something with the response
                 console.log("Files: ", res);
