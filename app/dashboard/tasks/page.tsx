@@ -1,7 +1,7 @@
-import React from "react";
+import TasksCard from "@/components/dashboard/tasks-card";
 
 const TasksPage = () => {
-  return <div>TasksPage</div>;
+  return <TasksCard />;
 };
 
 export default TasksPage;
