@@ -11,6 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 import { Button } from "../ui/button";
+import StartModal from "../forms/start-modal";
 
 const tasks = [
   {
@@ -75,7 +76,11 @@ export function TasksTable() {
                 size={"sm"}
                 asChild
               >
-                <Link href={task.link}>{task.actionButton}</Link>
+                {task.actionButton === "Review" ? (
+                  <Link href={task.link}>{task.actionButton}</Link>
+                ) : (
+                  <StartModal />
+                )}
               </Button>
             </TableCell>
           </TableRow>
