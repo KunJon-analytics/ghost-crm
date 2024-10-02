@@ -2,6 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
 import { auth } from "@/auth";
+import { sendDocumentUploaded } from "@/lib/mail";
 
 const f = createUploadthing();
 
@@ -15,16 +16,17 @@ export const ourFileRouter = {
       const session = await auth();
 
       // If you throw, the user will not be able to upload
-      if (!session?.user?.id) throw new UploadThingError("Unauthorized");
+      if (!session?.user?.email) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: session.user.id };
+      return { userEmail: session.user.email };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      console.log("Upload complete for userId:", metadata.userEmail);
 
       console.log("file url", file.url);
+      await sendDocumentUploaded(metadata.userEmail, file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { fileUrl: file.url, fileName: file.name };
@@ -36,16 +38,17 @@ export const ourFileRouter = {
       const session = await auth();
 
       // If you throw, the user will not be able to upload
-      if (!session?.user?.id) throw new UploadThingError("Unauthorized");
+      if (!session?.user?.email) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: session.user.id };
+      return { userEmail: session.user.email };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for userId:", metadata.userId);
+      console.log("Upload complete for userEmail:", metadata.userEmail);
 
       console.log("file url", file.url);
+      await sendDocumentUploaded(metadata.userEmail, file.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { fileUrl: file.url, fileName: file.name };

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+// import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
@@ -102,14 +102,14 @@ export const LoginForm = () => {
                       type="password"
                     />
                   </FormControl>
-                  <Button
+                  {/* <Button
                     size="sm"
                     variant="link"
                     asChild
                     className="px-0 font-normal"
                   >
                     <Link href="/auth/reset">Forgot password?</Link>
-                  </Button>
+                  </Button> */}
                   <FormMessage />
                 </FormItem>
               )}

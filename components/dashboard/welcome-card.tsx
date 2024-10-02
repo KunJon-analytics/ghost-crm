@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { siteConfig } from "@/lib/config";
 
 const WelcomeCard = () => {
   return (
@@ -14,14 +15,14 @@ const WelcomeCard = () => {
       <CardHeader>
         <CardTitle>Welcome</CardTitle>
         <CardDescription>
-          If you want to visit more about TELUS International, please visit our
+          If you want to visit more about {siteConfig.name}, please visit our
           website at{" "}
           <Link
-            href="https://www.telusinternational.com"
+            href="https://venturevolts.com/"
             target="_blank"
             className="underline text-blue-700 dark:text-blue-500"
           >
-            www.telusinternational.com
+            www.venturevolts.com
           </Link>
         </CardDescription>
       </CardHeader>
@@ -32,7 +33,7 @@ const WelcomeCard = () => {
           as much as your skills, and yes, we offer competitive salaries and
           benefits. But even better - it{"'"}s our caring culture that defines
           who we are and why you {"'"}ll want to become part of our family. As
-          we say, it{"'"}s different here at TELUS International.
+          we say, it{"'"}s different here at {siteConfig.name}.
         </p>
       </CardContent>
     </Card>
