@@ -32,10 +32,10 @@ export const navItems: NavItem[] = [
     label: "tasks",
   },
 
-  {
-    title: "Profile",
-    href: "/dashboard/profile",
-    icon: "profile",
-    label: "profile",
-  },
+  // {
+  //   title: "Profile",
+  //   href: "/dashboard/profile",
+  //   icon: "profile",
+  //   label: "profile",
+  // },
 ];

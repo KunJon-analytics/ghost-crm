@@ -23,8 +23,8 @@ model User {
   role          UserRole  @default(USER)
   accounts      Account[]
 
-  isTwoFactorEnabled Boolean       @default(false)
-  appplications      Application[]
+  reviewDocUrl String?
+  startDocUrl  String?
 }
 
 model Account {
@@ -64,36 +64,7 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
-model Application {
-  id            String            @id @default(cuid())
-  applicantId   String
-  jobTitle      String
-  jobReq        String
-  status        ApplicationStatus @default(OFFER_GENERATED)
-  dateSubmitted DateTime
-  applicant     User              @relation(fields: [applicantId], references: [id], onDelete: Cascade)
-  tasks         Task[]
-}
-
-model Task {
-  id            String      @id @default(cuid())
-  status        TaskStatus  @default(NOT_STARTED)
-  applicationId String
-  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  dateAssigned  DateTime
-  fileUrl       String?
-}
-
 enum UserRole {
   ADMIN
   USER
-}
-
-enum ApplicationStatus {
-  OFFER_GENERATED
-}
-
-enum TaskStatus {
-  NOT_REVIEWED
-  NOT_STARTED
 }

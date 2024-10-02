@@ -2,10 +2,14 @@
 
 import bcrypt from "bcryptjs";
 import * as z from "zod";
+import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 import prisma from "@/lib/prisma";
 import { RegisterSchema } from "@/lib/schemas";
 import { getUserByEmail } from "@/services/user";
+import { signIn } from "@/auth";
+import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -32,6 +36,26 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   });
 
   // TODO: Send verification token email
+
+  try {
+    revalidatePath("/", "layout");
+    await signIn("credentials", {
+      email,
+      password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return { error: "Invalid credentials!" };
+        default:
+          return { error: "Something went wrong!" };
+      }
+    }
+
+    throw error;
+  }
 
   return { success: "You have registered successfully!" };
 };

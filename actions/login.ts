@@ -2,6 +2,7 @@
 
 import { AuthError } from "next-auth";
 import * as z from "zod";
+import { revalidatePath } from "next/cache";
 
 import { signIn } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/lib/routes";
@@ -27,6 +28,7 @@ export const login = async (
   }
 
   try {
+    revalidatePath("/", "layout");
     await signIn("credentials", {
       email,
       password,

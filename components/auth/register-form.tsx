@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { useRouter } from "next/navigation";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import { Button } from "@/components/ui/button";
@@ -16,17 +17,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import { register } from "@/actions/register";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
-
 import { RegisterSchema } from "@/lib/schemas";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransistion] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -43,8 +43,9 @@ export const RegisterForm = () => {
 
     startTransistion(() => {
       register(values).then((data) => {
-        setError(data.error);
-        setSuccess(data.success);
+        router.refresh();
+        setError(data?.error);
+        setSuccess(data?.success);
       });
     });
   };
