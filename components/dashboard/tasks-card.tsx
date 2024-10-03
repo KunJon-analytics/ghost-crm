@@ -30,7 +30,12 @@ const TasksCard = async () => {
     if (task.actionButton === "Review" && !!user?.reviewDocUrl) {
       status = "Completed";
     }
-    return { ...task, status };
+    return {
+      ...task,
+      status,
+      dateAssigned:
+        user?.emailVerified?.toDateString() || new Date().toDateString(),
+    };
   });
 
   const todoTasks = userTasks.filter((task) => task.status !== "Completed");

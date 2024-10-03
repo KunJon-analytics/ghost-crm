@@ -8,6 +8,7 @@ export const getUserByEmail = async (email: string) => {
         id: true,
         name: true,
         password: true,
+        emailVerified: true,
         email: true,
         image: true,
         reviewDocUrl: true,
