@@ -15,7 +15,7 @@ import { Button } from "../ui/button";
 const applications = [
   {
     id: 1,
-    jobTitle: "US Rater",
+    jobTitle: "Virtual Assistant",
     jobReq: "Req_00141951",
     status: "Offer Generated",
     dateSubmitted: "September 17, 2024",

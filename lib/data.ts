@@ -20,7 +20,7 @@ export const tasks = [
   {
     id: 1,
     task: "Review Documents",
-    jobTitle: "US Rater",
+    jobTitle: "Virtual Assistant",
     jobReq: "Req_00141951",
     status: "Not Reviewed",
     dateAssigned: "September 18, 2024",
@@ -30,7 +30,7 @@ export const tasks = [
   {
     id: 2,
     task: "Complete Questionnaire",
-    jobTitle: "US Rater",
+    jobTitle: "Virtual Assistant",
     jobReq: "Req_00141951",
     status: "Not Started",
     dateAssigned: "September 18, 2024",

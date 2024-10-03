@@ -53,7 +53,7 @@ const StartModal = () => {
         <CredenzaHeader>
           <CredenzaTitle>Complete Questionnaire</CredenzaTitle>
           <CredenzaDescription>
-            <span className="font-bold">Job Title:</span> US Rater
+            <span className="font-bold">Job Title:</span> Virtual Assistant
           </CredenzaDescription>
         </CredenzaHeader>
         <CredenzaBody>
