@@ -74,6 +74,8 @@ const ReviewForm = () => {
                       <Link
                         href={`/${document.fileName}`}
                         className="text-sm underline font-medium leading-none"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         {document.fileName}
                       </Link>
@@ -134,6 +136,8 @@ const ReviewForm = () => {
               <Link
                 href="/i-9.pdf"
                 className="text-sm underline font-medium leading-none"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 i-9.pdf
               </Link>

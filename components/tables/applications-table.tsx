@@ -1,4 +1,5 @@
 import { Eye } from "lucide-react";
+import { notFound } from "next/navigation";
 
 import {
   Table,
@@ -9,6 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { auth } from "@/auth";
+import { getUserByEmail } from "@/services/user";
 
 import { Button } from "../ui/button";
 
@@ -22,7 +25,15 @@ const applications = [
   },
 ];
 
-export function ApplicationsTable() {
+export async function ApplicationsTable() {
+  const session = await auth();
+
+  if (!session?.user.email) {
+    notFound();
+  }
+
+  const user = await getUserByEmail(session.user.email);
+
   return (
     <Table>
       <TableHeader className="hidden lg:table-header-group">
@@ -51,7 +62,7 @@ export function ApplicationsTable() {
               <TaskStatusBadge status={application.status} />
             </TableCell>
             <TableCell className="hidden lg:table-cell">
-              {application.dateSubmitted}
+              {user?.emailVerified?.toDateString() || new Date().toDateString()}
             </TableCell>
             <TableCell>
               <Button variant={"ghost"} size={"icon"}>
