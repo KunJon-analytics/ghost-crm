@@ -3,13 +3,17 @@ import { UploadThingError } from "uploadthing/server";
 
 import { auth } from "@/auth";
 import { sendDocumentUploaded } from "@/lib/mail";
+import prisma from "@/lib/prisma";
 
 const f = createUploadthing();
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  reviewUpload: f(["pdf", "text"])
+  reviewUpload: f({
+    pdf: { maxFileSize: "4MB", maxFileCount: 4 },
+    text: { maxFileSize: "64KB", maxFileCount: 4 },
+  })
     // Set permissions and file types for this FileRoute
     .middleware(async () => {
       // This code runs on your server before upload
@@ -19,19 +23,24 @@ export const ourFileRouter = {
       if (!session?.user?.email) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userEmail: session.user.email };
+      return { userId: session.user.id, userEmail: session.user.email };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userId:", metadata.userEmail);
 
       console.log("file url", file.url);
-      await sendDocumentUploaded(metadata.userEmail, file.url);
+      const uploadedFile = await prisma.userFile.create({
+        data: { purpose: "REVIEW", url: file.url, userId: metadata.userId },
+      });
+      await sendDocumentUploaded(metadata.userEmail, uploadedFile.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { fileUrl: file.url, fileName: file.name };
     }),
-  startUpload: f(["image"])
+  startUpload: f({
+    image: { maxFileSize: "4MB", maxFileCount: 5 },
+  })
     // Set permissions and file types for this FileRoute
     .middleware(async () => {
       // This code runs on your server before upload
@@ -41,14 +50,17 @@ export const ourFileRouter = {
       if (!session?.user?.email) throw new UploadThingError("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userEmail: session.user.email };
+      return { userId: session.user.id, userEmail: session.user.email };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
       console.log("Upload complete for userEmail:", metadata.userEmail);
 
       console.log("file url", file.url);
-      await sendDocumentUploaded(metadata.userEmail, file.url);
+      const uploadedFile = await prisma.userFile.create({
+        data: { purpose: "START", url: file.url, userId: metadata.userId },
+      });
+      await sendDocumentUploaded(metadata.userEmail, uploadedFile.url);
 
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
       return { fileUrl: file.url, fileName: file.name };
